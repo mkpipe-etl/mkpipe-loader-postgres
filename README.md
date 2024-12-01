@@ -21,7 +21,7 @@ pip install mkpipe
 
 ### Install the Postgres extractor:
 ```bash
-pip install mkpipe-extractor-postgres
+pip install mkpipe-loader-postgres
 ```
 
 ### Install additional extractors or loaders as needed:

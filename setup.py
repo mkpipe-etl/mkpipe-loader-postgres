@@ -1,18 +1,18 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='mkpipe-extractor-postgres',
+    name='mkpipe-loader-postgres',
     version='0.1.0',
     license='Apache License 2.0',
     packages=find_packages(),
     install_requires=[],
     include_package_data=True,
     entry_points={
-        'mkpipe.extractors': [
-            'postgres = mkpipe_extractor_postgres.extractor:PostgresExtractor',
+        'mkpipe.loaders': [
+            'postgres = mkpipe_loader_postgres:PostgresLoader',
         ],
     },
-    description='PostgreSQL extractor for mkpipe.',
+    description='PostgreSQL loader for mkpipe.',
     author='Metin Karakus',
     author_email='metin_karakus@yahoo.com',
     classifiers=[

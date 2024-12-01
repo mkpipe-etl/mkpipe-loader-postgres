@@ -4,11 +4,11 @@
 
 ### Added
 - Initial release of MkPipe with core ETL functionality.
-- Support for PostgreSQL extractor plugin.
+- Support for PostgreSQL loader plugin.
 - Support for basic YAML configuration format.
 
 ### Changed
-- Refactored core logic to support dynamic plugin discovery for extractors and loaders.
+- Refactored core logic to support dynamic plugin discovery for loaders and loaders.
 
 ### Fixed
 - Fixed issue with loader not handling large datasets correctly.
@@ -17,7 +17,7 @@
 
 ### Added
 - First official release of MkPipe.
-- Basic implementation of the `mkpipe` package and `mkpipe-extractor-postgres` extractor plugin.
+- Basic implementation of the `mkpipe` package and `mkpipe-loader-postgres` loader plugin.
 
 ### Changed
 - None.
