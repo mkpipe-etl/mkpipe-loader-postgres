@@ -1,4 +1,3 @@
-
 from urllib.parse import quote_plus
 from pyspark.sql import functions as F
 from mkpipe.utils import log_container, Logger
@@ -69,8 +68,6 @@ class PostgresLoader:
                 replication_method=replication_method,  # ('incremental', 'full')
                 error_message='',
             )
-
-
 
             df = get_parser(file_type)(data, self.settings)
             df = self.add_custom_columns(df, elt_start_time)
@@ -162,4 +159,3 @@ class PostgresLoader:
                 logger.error(error_message)
                 raise Exception(message) from e
         return
-
