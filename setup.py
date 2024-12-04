@@ -9,7 +9,7 @@ setup(
     include_package_data=True,
     entry_points={
         'mkpipe.loaders': [
-            'postgres = mkpipe_loader_postgres:PostgresLoader',
+            'postgresql = mkpipe_loader_postgres:PostgresLoader',
         ],
     },
     description='PostgreSQL loader for mkpipe.',

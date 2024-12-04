@@ -35,7 +35,7 @@ To run the ETL process, use the following command:
 from mkpipe_core.plugins.registry import EXTRACTORS
 
 def test_postgres_extractor():
-    postgres_extractor = EXTRACTORS.get("postgres")
+    postgres_extractor = EXTRACTORS.get("postgresql")
     if not postgres_extractor:
         print("Postgres extractor not found!")
         return
