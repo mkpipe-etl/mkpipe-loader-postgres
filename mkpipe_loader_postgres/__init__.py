@@ -3,13 +3,17 @@ from pyspark.sql import functions as F
 from mkpipe.utils import log_container, Logger
 from mkpipe.functions_spark import remove_partitioned_parquet, get_parser
 from mkpipe.functions_db import manifest_table_update
+from mkpipe.utils.base_class import PipeSettings
 import time
 from pathlib import Path
 
 
 class PostgresLoader:
     def __init__(self, config, settings):
-        self.settings = settings
+        if isinstance(settings, dict):
+            self.settings = PipeSettings(**settings)
+        else:
+            self.settings = settings
         self.connection_params = config['connection_params']
         self.host = self.connection_params['host']
         self.port = self.connection_params['port']
