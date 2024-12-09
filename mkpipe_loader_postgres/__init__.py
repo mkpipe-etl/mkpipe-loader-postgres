@@ -75,7 +75,6 @@ class PostgresLoader:
 
             df = get_parser(file_type)(data, self.settings)
             df = self.add_custom_columns(df, elt_start_time)
-            # print("Partition count on write", df.rdd.getNumPartitions())
             message = dict(
                 table_name=name,
                 status='loading',
