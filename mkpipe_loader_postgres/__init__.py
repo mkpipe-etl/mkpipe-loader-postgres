@@ -138,7 +138,7 @@ class PostgresLoader:
 
         except Exception as e:
             # Log the error message and update the mkpipe_manifest with the error details
-            error_message = dict(
+            message = dict(
                 table_name=name,
                 status='failed',
                 type='loading',
@@ -159,6 +159,6 @@ class PostgresLoader:
                 logger.warning(message)
                 return
             else:
-                logger.error(error_message)
+                logger.error(message)
                 raise Exception(message) from e
         return
