@@ -1,11 +1,13 @@
-from urllib.parse import quote_plus
-from pyspark.sql import functions as F
-from mkpipe.utils import log_container, Logger
-from mkpipe.functions_spark import remove_partitioned_parquet, get_parser
-from mkpipe.functions_db import manifest_table_update
-from mkpipe.utils.base_class import PipeSettings
 import time
 from pathlib import Path
+from urllib.parse import quote_plus
+from pyspark.sql import functions as F
+from pyspark.sql.types import TimestampType
+from mkpipe.config import load_config
+from mkpipe.functions_db import get_db_connector
+from mkpipe.functions_spark import remove_partitioned_parquet, get_parser
+from mkpipe.utils import log_container, Logger
+from mkpipe.utils.base_class import PipeSettings
 
 
 class PostgresLoader:
@@ -29,6 +31,11 @@ class PostgresLoader:
         self.settings.jars_path = str(script_dir / 'jars') + '/*'
 
         self.jdbc_url = f'jdbc:{self.driver_name}://{self.host}:{self.port}/{self.database}?user={self.username}&password={self.password}&currentSchema={self.schema}'
+
+        config = load_config()
+        connection_params = config['settings']['backend']
+        db_type = connection_params['database_type']
+        self.backend = get_db_connector(db_type)(connection_params)
 
     def add_custom_columns(self, df, elt_start_time):
         if 'etl_time' in df.columns:
@@ -54,7 +61,7 @@ class PostgresLoader:
 
             if not file_type:
                 'means that the data fetched before no new data'
-                manifest_table_update(
+                self.backend.manifest_table_update(
                     name=name,
                     value=None,  # Last point remains unchanged
                     value_type=None,  # Type remains unchanged
@@ -64,7 +71,7 @@ class PostgresLoader:
                 )
                 return
 
-            manifest_table_update(
+            self.backend.manifest_table_update(
                 name=name,
                 value=None,  # Last point remains unchanged
                 value_type=None,  # Type remains unchanged
@@ -117,7 +124,7 @@ class PostgresLoader:
             """
 
             # Update last point in the mkpipe_manifest table if applicable
-            manifest_table_update(
+            self.backend.manifest_table_update(
                 name=name,
                 value=last_point_value,
                 value_type=iterate_column_type,
@@ -146,7 +153,7 @@ class PostgresLoader:
                 etl_start_time=str(elt_start_time),
             )
 
-            manifest_table_update(
+            self.backend.manifest_table_update(
                 name=name,
                 value=None,  # Last point remains unchanged
                 value_type=None,  # Type remains unchanged
