@@ -1,5 +1,7 @@
 from mkpipe.spark import JdbcLoader
 
+JAR_PACKAGES = ['org.postgresql:postgresql:42.7.4']
+
 
 class PostgresLoader(JdbcLoader, variant='postgresql'):
     driver_name = 'postgresql'
