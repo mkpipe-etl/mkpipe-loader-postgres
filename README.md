@@ -17,7 +17,7 @@ This project is licensed under the Apache 2.0 License - see the [LICENSE](LICENS
 ```yaml
 connections:
   pg_target:
-    variant: postgresql
+    variant: postgres
     host: localhost
     port: 5432
     database: mydb
