@@ -40,7 +40,36 @@ pipelines:
         target_name: public.stg_table
         replication_method: full
         batchsize: 10000
+
+      - name: source_table
+        target_name: public.stg_table
+        replication_method: incremental
+        iterate_column: updated_at
+        write_strategy: upsert
+        write_key: [id]
 ```
+
+---
+
+## Write Strategy
+
+Control how data is written to PostgreSQL:
+
+```yaml
+      - name: source_table
+        target_name: public.stg_table
+        write_strategy: upsert       # append | replace | upsert | merge
+        write_key: [id]              # required for upsert/merge
+```
+
+| Strategy | PostgreSQL Behavior |
+|---|---|
+| `append` | Plain `INSERT` via JDBC (default for incremental) |
+| `replace` | Drop and recreate table, then insert (default for full) |
+| `upsert` | `INSERT ... ON CONFLICT (write_key) DO UPDATE` via temp table |
+| `merge` | Same as upsert for PostgreSQL |
+
+> **Note:** `upsert`/`merge` requires `write_key`. The loader writes to a temp table first, then executes a single `INSERT ... ON CONFLICT` statement to merge into the target.
 
 ---
 
@@ -78,6 +107,8 @@ Two parameters control write performance:
 | `replication_method` | `full` / `incremental` | `full` | Replication strategy |
 | `batchsize` | int | `10000` | Rows per JDBC batch insert |
 | `write_partitions` | int | — | Coalesce DataFrame to N partitions before writing |
+| `write_strategy` | string | — | `append`, `replace`, `upsert`, `merge` |
+| `write_key` | list | — | Key columns for upsert/merge (required) |
 | `dedup_columns` | list | — | Columns used for `mkpipe_id` hash deduplication |
 | `tags` | list | `[]` | Tags for selective pipeline execution |
 | `pass_on_error` | bool | `false` | Skip table on error instead of failing |
